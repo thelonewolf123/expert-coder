@@ -13,7 +13,7 @@
 import { runCode, setEngine, setOptions } from "client-side-python-runner";
 
 export default {
-  props: ["code"],
+  props: ["code", "isWaitingForInput", "inputData"],
   data() {
     return {
       pyodide: null,
@@ -44,6 +44,27 @@ export default {
     },
     updateOutput(output) {
       this.$emit("result", output);
+    },
+    async getInput(text) {
+      this.$emit("inputPrompt:update", text);
+      this.isWaitingForInput = true;
+      await this.waitUntil(this.waitingForInput);
+      return this.inputData;
+    },
+    waitingForInput() {
+      return this.isWaitingForInput;
+    },
+    async waitUntil(condition) {
+      return new Promise((resolve) => {
+        let interval = setInterval(() => {
+          if (!condition()) {
+            return;
+          }
+
+          clearInterval(interval);
+          resolve();
+        }, 100);
+      });
     },
   },
 };
