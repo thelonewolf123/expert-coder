@@ -4,7 +4,7 @@
       <pane class="grid-content" max-size="90" min-size="10" style="height: 560px">
         <editor :title="title" :code.sync="code" />
       </pane>
-      <pane class="grid-content output" max-size="90" min-size="0" size="20">
+      <pane class="grid-content" max-size="90" min-size="0" size="20">
         <interpreter :code="code" />
       </pane>
     </splitpanes>
@@ -37,8 +37,8 @@ export default {
 };
 </script>
 
-<style scoped>
-.output {
-  overflow-y: auto;
+<style>
+.splitpanes.default-theme .splitpanes__pane {
+  background-color: #fff;
 }
 </style>

@@ -1,8 +1,22 @@
 <template>
-  <div>
+  <div class="interpreter">
     <div class="grid-content">
-      <el-button type="danger" @click="clearOutput"> Clear </el-button>
-      <el-button @click="executeScript" v-if="isPythonLoaded" type="success" icon="el-icon-caret-right">
+      <el-select v-model="codeEngine" placeholder="Code Engine" @change="selectCodeEngine">
+        <el-option
+          v-for="item in codeEngineList"
+          :key="item"
+          :label="item"
+          :value="item"
+        >
+        </el-option>
+      </el-select>
+      <el-button type="danger" @click="clearOutput" class="margin-10 "> Clear </el-button>
+      <el-button
+        @click="executeScript"
+        v-if="isPythonLoaded"
+        type="success"
+        icon="el-icon-caret-right"
+      >
         Run
       </el-button>
       <el-button type="primary" :loading="!isPythonLoaded" v-else>
@@ -40,6 +54,8 @@ export default {
       output: [],
       inputData: null,
       inputPrompt: null,
+      codeEngine: "skulpt",
+      codeEngineList: ["skulpt", "pyodide", "brython"],
     };
   },
   mounted() {
@@ -74,6 +90,9 @@ export default {
     clearOutput() {
       this.output = [];
     },
+    selectCodeEngine(){
+      setEngine(this.codeEngine);
+    }
     // async getInput(text) {
     //   this.inputPrompt = text;
     //   this.isWaitingForInput = true;
@@ -105,10 +124,11 @@ export default {
 </script>
 
 <style scoped>
-.control {
-  display: flex;
-  align-content: right;
-  justify-content: space-between;
+.interpreter {
+  overflow-y: auto;
+  padding: 5px;
+  height: 100%;
+  background-color: #fafafa;
 }
 
 .bg-purple-dark {
