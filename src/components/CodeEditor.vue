@@ -1,30 +1,28 @@
 <template>
   <div>
-    <el-row :gutter="24">
-      <el-col :span="12">
-        <div class="grid-content">
-          <editor :title="title" :code.sync="code" />
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="grid-content">
-          <el-col class="interpreter">
-            <interpreter :code="code" />
-          </el-col>
-        </div>
-      </el-col>
-    </el-row>
+    <splitpanes  class="default-theme" horizontal style="height: 600px">
+      <pane class="grid-content" max-size="90" min-size="10" style="height: 560px">
+        <editor :title="title" :code.sync="code" />
+      </pane>
+      <pane class="grid-content output" max-size="90" min-size="0" size="20">
+        <interpreter :code="code" />
+      </pane>
+    </splitpanes>
   </div>
 </template>
 
 <script>
 import Editor from "./Editor.vue";
 import Interpreter from "./Interpreter.vue";
+import { Splitpanes, Pane } from 'splitpanes'
+import 'splitpanes/dist/splitpanes.css'
 
 export default {
   components: {
     Editor,
     Interpreter,
+    Splitpanes,
+    Pane,
   },
   data() {
     return {
@@ -39,8 +37,8 @@ export default {
 };
 </script>
 
-<style>
-.interpreter {
-  padding-top: 2rem;
+<style scoped>
+.output {
+  overflow-y: auto;
 }
 </style>

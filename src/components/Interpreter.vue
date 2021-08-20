@@ -1,24 +1,15 @@
 <template>
   <div>
-    <el-row :gutter="24">
-      <el-col :span="10" :offset="14">
-        <div class="grid-content control">
-          <record-control />
-          <el-button type="danger" @click="clearOutput"> Clear </el-button>
-          <el-button
-            @click="executeScript"
-            v-if="isPythonLoaded"
-            type="success"
-          >
-            Run
-          </el-button>
-          <el-button type="primary" :loading="!isPythonLoaded" v-else>
-            Loading
-          </el-button>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row class="output height-300">
+    <div class="grid-content">
+      <el-button type="danger" @click="clearOutput"> Clear </el-button>
+      <el-button @click="executeScript" v-if="isPythonLoaded" type="success" icon="el-icon-caret-right">
+        Run
+      </el-button>
+      <el-button type="primary" :loading="!isPythonLoaded" v-else>
+        Loading
+      </el-button>
+    </div>
+    <el-row class="output">
       <div v-for="res in output" :key="res.id">
         <div v-if="res.result">
           {{ res.result }}
@@ -40,10 +31,8 @@
 <script>
 import { runCode, setEngine, setOptions } from "client-side-python-runner";
 import { v4 } from "uuid";
-import RecordControl from "./RecordControl.vue";
 
 export default {
-  components: { RecordControl },
   props: ["code"],
   data() {
     return {
@@ -134,16 +123,11 @@ export default {
   margin: 5px;
 }
 
-.height-300 {
-  height: 500px;
-  overflow-y: auto;
-}
-
 .margin-10 {
   margin-left: 10px;
 }
 
 .error {
-  color: red
+  color: red;
 }
 </style>
