@@ -47,9 +47,8 @@ export default {
   props: ["code"],
   data() {
     return {
-      isPythonLoaded: false,
+      isPythonLoaded: true,
       output: [],
-      isWaitingForInput: false,
       inputData: null,
       inputPrompt: null,
     };
@@ -136,11 +135,15 @@ export default {
 }
 
 .height-300 {
-  height: 310px;
+  height: 500px;
   overflow-y: auto;
 }
 
 .margin-10 {
   margin-left: 10px;
+}
+
+.error {
+  color: red
 }
 </style>
