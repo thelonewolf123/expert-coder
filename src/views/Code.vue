@@ -24,7 +24,7 @@ export default {
     },
     methods: {
         async getCode(id){
-           let result = await fetch(`/api/code?id=${id}`)
+           let result = await fetch(`/api/code.js?id=${id}`)
            let data = await result.json();
            console.log(data)
            this.title = data.title;
