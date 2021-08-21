@@ -8,7 +8,11 @@
       },
       "rewrites": [
           {"source": "/api/code/:id", "destination": "/api/code"},
-          { "source": "(.*)", "destination": "/index.html" } 
+          { "source": "/code", "destination": "/index.html" },
+          { "source": "/about/:id", "destination": "/index.html" },
+          { "source": "/", "destination": "/index.html" }
+          
+          
       ],
       "cleanUrls": true
 }
