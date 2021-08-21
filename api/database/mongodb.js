@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const MONGODB_URI = process.env.mongodb_connection_uri;
+const MONGODB_URI = process.env.mongodb_connection_uri || "mongodb+srv://lonewolf:sA6Aa6butEpjdfX2@serverless-mongodb.q3fp5.mongodb.net/expert-coder?retryWrites=true&w=majority";
 
 mongoose.Promise = global.Promise;
 let isConnected;

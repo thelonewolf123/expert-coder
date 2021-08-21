@@ -11,7 +11,7 @@
       <el-menu-item index="2-2">item two</el-menu-item>
       <el-menu-item index="2-3">item three</el-menu-item>
     </el-submenu> -->
-    <el-menu-item index="/courses">Courses</el-menu-item>
+    <!-- <el-menu-item index="/courses">Courses</el-menu-item> -->
     <el-menu-item index="/about">About</el-menu-item>
   </el-menu>
 </template>

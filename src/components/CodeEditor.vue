@@ -6,7 +6,7 @@
         max-size="100"
         min-size="0">
         <div  style="height: 480px">
-          <editor :title="title" :code.sync="code" />
+          <editor :title.sync="title" :code.sync="code" />
         </div>
       </pane>
       <pane class="grid-content" max-size="90" min-size="0" size="20">
