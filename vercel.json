@@ -8,11 +8,9 @@
       },
       "rewrites": [
           {"source": "/api/code/:id", "destination": "/api/code"},
-          { "source": "/code", "destination": "/index.html" },
-          { "source": "/about/:id", "destination": "/index.html" },
+          { "source": "/code/:id", "destination": "/index.html" },
+          { "source": "/about", "destination": "/index.html" },
           { "source": "/", "destination": "/index.html" }
-          
-          
       ],
       "cleanUrls": true
 }
