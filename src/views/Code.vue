@@ -1,7 +1,7 @@
 <template>
     <el-container>
         <el-main>
-            <code-editor />
+            <code-editor :title="title" :code="code" />
         </el-main>
     </el-container>
 </template>
@@ -19,11 +19,12 @@ export default {
     data(){
         return {
             code: null,
+            title: null,
         }
     },
     methods: {
         async getCode(id){
-           let result = await fetch(`/api/code/${id}`)
+           let result = await fetch(`/api/code?id=${id}`)
            let data = await result.json();
            console.log(data)
            this.title = data.title;
