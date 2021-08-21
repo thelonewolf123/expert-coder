@@ -1,16 +1,27 @@
 {
-    "version": 2,
-    "functions": {
-        "api/code.js": {
-          "memory": 128,
-          "maxDuration": 10
-        }
-      },
-      "rewrites": [
-          {"source": "/api/code/:id", "destination": "/api/code"},
-          { "source": "/code/:id", "destination": "/index.html" },
-          { "source": "/about", "destination": "/index.html" },
-          { "source": "/", "destination": "/index.html" }
-      ],
-      "cleanUrls": true
+  "version": 2,
+  "functions": {
+    "api/code.js": {
+      "memory": 128,
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [{
+    "source": "/api/code/:id",
+    "destination": "/api/code"
+  }],
+  "redirects": [{
+      "source": "/code/:id",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/",
+      "destination": "/index.html"
+    }
+  ],
+  "cleanUrls": true
 }
