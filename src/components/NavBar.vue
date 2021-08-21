@@ -23,6 +23,10 @@ export default {
       activePath: "/",
     };
   },
+  mounted() {
+    console.log("NavBar mounted");
+    this.activePath = window.location.pathname;
+  },
   methods: {
     handleSelect(key) {
       this.$router.push({ path: key });

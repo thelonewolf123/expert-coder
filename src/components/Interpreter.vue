@@ -1,7 +1,11 @@
 <template>
   <div class="interpreter">
     <div class="grid-content">
-      <el-select v-model="codeEngine" placeholder="Code Engine" @change="selectCodeEngine">
+      <el-select
+        v-model="codeEngine"
+        placeholder="Code Engine"
+        @change="selectCodeEngine"
+      >
         <el-option
           v-for="item in codeEngineList"
           :key="item"
@@ -10,7 +14,9 @@
         >
         </el-option>
       </el-select>
-      <el-button type="danger" @click="clearOutput" class="margin-10 "> Clear </el-button>
+      <el-button type="danger" @click="clearOutput" class="margin-10">
+        Clear
+      </el-button>
       <el-button
         @click="executeScript"
         v-if="isPythonLoaded"
@@ -70,8 +76,22 @@ export default {
       onLoading: () => {
         self.isPythonLoaded = false;
       },
-      onLoaded: () => {
+      onLoaded: (engine) => {
+        console.log("Python loaded");
+        console.log(engine);
+        // if (engine === "pyodide") {
+        //   console.log(engine);
+        //   window.pyodide
+        //     .loadPackage("micropip")
+        //     .then(() => {
+        //       self.isPythonLoaded = true;
+        //     })
+        //     .catch((err) => {
+        //       console.log(err);
+        //     });
+        // } else {
         self.isPythonLoaded = true;
+        // }
       },
     });
     setEngine("skulpt");
@@ -90,9 +110,9 @@ export default {
     clearOutput() {
       this.output = [];
     },
-    selectCodeEngine(){
+    selectCodeEngine() {
       setEngine(this.codeEngine);
-    }
+    },
     // async getInput(text) {
     //   this.inputPrompt = text;
     //   this.isWaitingForInput = true;

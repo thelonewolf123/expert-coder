@@ -11,6 +11,7 @@
     "client-side-python-runner": "^1.6.2",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.5",
+    "mongoose": "^5.13.7",
     "splitpanes": "^2.3.8",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"
