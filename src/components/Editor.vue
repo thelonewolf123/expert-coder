@@ -65,7 +65,7 @@ export default {
       this.dialogVisible = false;
     },
     async shareCode() {
-      const result = await fetch("/api/code", {
+      const result = await fetch("/api/code.js", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
