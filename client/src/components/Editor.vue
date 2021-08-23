@@ -65,7 +65,7 @@ export default {
       this.dialogVisible = false;
     },
     async shareCode() {
-      const result = await fetch("/api/code.js", {
+      const result = await fetch("/api/code", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export default {
         return;
       }
       let self = this;
-      const url = window.location.origin + "/code/" + data._id;
+      const url = window.location.origin + "/code/" + data.id;
       navigator.clipboard.writeText(url).then(
         function () {
           self.$notify({
@@ -88,7 +88,7 @@ export default {
             title: "Share Code",
             message: "Url Copied to clipboard",
           });
-          self.$router.push({ path: "/code/" + data._id });
+          self.$router.push({ path: "/code/" + data.id });
         },
         function () {
           self.$notify({

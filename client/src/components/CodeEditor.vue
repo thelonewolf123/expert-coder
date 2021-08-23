@@ -1,11 +1,8 @@
 <template>
   <div>
     <splitpanes class="default-theme" horizontal style="height: 600px">
-      <pane
-        class="grid-content"
-        max-size="100"
-        min-size="0">
-        <div  style="height: 480px">
+      <pane class="grid-content" max-size="100" min-size="0">
+        <div style="height: 480px">
           <editor :title.sync="title" :code.sync="code" />
         </div>
       </pane>
@@ -23,6 +20,7 @@ import { Splitpanes, Pane } from "splitpanes";
 import "splitpanes/dist/splitpanes.css";
 
 export default {
+  props: ["titleProps", "codeProps"],
   components: {
     Editor,
     Interpreter,
@@ -37,7 +35,17 @@ export default {
     };
   },
   mounted() {
+    this.$route.params.id && this.getCode(this.$route.params.id);
     this.title = "Introduction to python";
+  },
+  methods: {
+    async getCode(id) {
+      let result = await fetch(`/api/code/${id}`);
+      let data = await result.json();
+      console.log(data);
+      this.title = data.title;
+      this.code = data.code;
+    },
   },
 };
 </script>
