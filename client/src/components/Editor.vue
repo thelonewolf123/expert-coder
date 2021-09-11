@@ -76,23 +76,30 @@ export default {
     recordEvent({ state, data }) {
       this.shareCodeVisible = state;
 
-      if (state) {
+      console.log("recording event");
+      if (state && data) {
+        console.log("recording completed");
         let formData = new FormData();
         formData.append("fname", this.title);
         formData.append("data", data);
-        let res = await fetch("api/file", {
+        fetch("api/file", {
           method: "POST",
           body: formData,
-        });
-        let json = await res.json();
-        let result = await fetch("/api/video", {
-          method: "POST",
-          body: JSON.stringify({
-            title: this.title,
-            code: this.codeTimeFrame,
-            fileId: json.id,
-          }),
-        });
+        })
+          .then((res) => res.json())
+          .then((json) => {
+            fetch("/api/video", {
+              method: "POST",
+              headers: {  
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                title: this.title,
+                code_json:JSON.stringify(this.codeTimeFrame),
+                video_id: json.id,
+              }),
+            });
+          });
         this.$notify({
           type: "success",
           title: "Video",

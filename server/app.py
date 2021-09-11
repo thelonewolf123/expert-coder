@@ -11,7 +11,7 @@ app = Flask(__name__, static_folder='../client/dist/',    static_url_path='/')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///expert-coder.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['DROPBOX_TOKEN'] = '1lVVXEH_X_wAAAAAAAAAAUlPx2Py51FQEW59-s8-sYeyTqGhx7pGRHAOHmGrDCny'
+app.config['DROPBOX_TOKEN'] = 'OGlCgFC5QJYAAAAAAAAAAW5IfFYuUFl8gi0Yk2rr2fBEE0Z_lW2cKayusLSFj-L_'
 dbx = dropbox.Dropbox(app.config['DROPBOX_TOKEN'])
 
 db = SQLAlchemy(app)
@@ -32,7 +32,7 @@ class Video(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.String(80), unique=True)
     video_id = db.Column(db.String(100), nullable=False)
-    title = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(100), nullable=False, unique=True)
     code_json = db.Column(db.String(100000), nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow())
 
@@ -52,7 +52,9 @@ class File(db.Model):
 
 @app.route('/')
 @app.route('/about')
+@app.route('/videos')
 @app.route('/code/<id>')
+@app.route('/video/<id>/')
 def index(id=1):
     return app.send_static_file('index.html')
 
@@ -61,7 +63,7 @@ def index(id=1):
 def code_post():
     code = request.json['code']
     title = request.json['title']
-    uid = uuid.uuid4()
+    uid = str(uuid.uuid4())
     code_obj = Code(uid=uid, code=code, title=title)
     db.session.add(code_obj)
     db.session.commit()
@@ -70,7 +72,7 @@ def code_post():
 
 @app.route('/api/code/<id>', methods=['GET'])
 def code_get(id):
-    code_obj = Code.filter_by(uid=id).first()
+    code_obj = Code.query.filter_by(uid=id).first()
     return dict(code=code_obj.code, title=code_obj.title, id=code_obj.uid)
 
 
@@ -80,15 +82,19 @@ def add_video():
         video_id = request.json['video_id']
         title = request.json['title']
         code_json = request.json['code_json']
-        uid = uuid.uuid4()
-        video_obj = Video(uid=uid, video_id=video_id, title=title, code_json=code_json)
-        db.session.add(video_obj)
-        db.session.commit()
-        return dict(video_id=video_id, title=title, code_json=code_json, id=video_obj.uid)
+        uid = str(uuid.uuid4())
+        try:
+            video_obj = Video(uid=uid, video_id=video_id, title=title, code_json=code_json)
+            db.session.add(video_obj)
+            db.session.commit()
+            return dict(video_id=video_id, title=title, code_json=code_json, id=video_obj.uid)
+        except Exception as e:
+            print(e)
+            return jsonify({"message": "Error adding video"}), 500
         
 @app.route('/api/videos', methods=['GET'])
 def get_videos():
-    video_obj = Video.objects.order_by('-date').all()
+    video_obj = Video.query.all()
     result = []
     for video in video_obj:
         result.append(dict(title=video.title, id=video.uid))
@@ -96,20 +102,20 @@ def get_videos():
 
 @app.route('/api/video/<id>', methods=['GET'])
 def get_video_by_id(id):
-    video_obj = Video.filter_by(uid=id).first()
-    file_obj = File.filter_by(uid=video_obj.video_id).first()
+    video_obj = Video.query.filter_by(uid=id).first()
+    file_obj = File.query.filter_by(uid=video_obj.video_id).first()
     filepath = file_obj.filepath
     url = get_file_from_dropbox(filepath)
-    return jsonify(video=url, title=video_obj.title, code_json=video_obj.code_json, id=video_obj.uid)
+    return jsonify(url=url, title=video_obj.title, code_json=video_obj.code_json, id=video_obj.uid)
 
 
 @app.route('/api/file', methods=['POST'])
 def save_file():
-    file = request.files['file']
+    file = request.files['data']
     filename = request.form['fname']
-    filepath = './files/' + filename
+    filepath = '/files/' + filename +'.webm'
     upload_file_to_dropbox(file, filepath)
-    uid = uuid.uuid4()
+    uid = str(uuid.uuid4())
     file_obj = File(uid=uid, filename=filename, filepath=filepath)
     db.session.add(file_obj)
     db.session.commit()

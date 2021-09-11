@@ -37,19 +37,19 @@ export default {
       };
       this.recorder.onstop = () => {
         const blob = new Blob(chunks, { type: "video/webm" });
-        this.$emit("recordEvent", { state: false, blob: blob });
+        this.$emit("recordEvent", { state: true, data: blob });
         // const videoURL = URL.createObjectURL(blob);
         // this.video = videoURL;
         this.isRecording = false;
       };
       this.recorder.start();
       this.isRecording = true;
+      this.$emit("recordEvent", { state: false, blob: null });
     },
     stopRecord() {
       this.recorder.stop();
       this.stream.getTracks().forEach((track) => track.stop());
       this.isRecording = false;
-      this.$emit("recordEvent", { state: false, blob: null });
     },
   },
 };
