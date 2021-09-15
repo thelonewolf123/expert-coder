@@ -2,7 +2,7 @@
   <div>
     <div class="wrapper">
       <h1>{{ title }}</h1>
-      <div class="share-code">
+      <div class="share-code" v-if="showControls">
         <record-control @recordEvent="recordEvent" />
         <div v-if="shareCodeVisible">
           <el-button type="primary" @click="changeTitle">
@@ -38,13 +38,12 @@ import VueAceEditor from "./VueAceEditor.vue";
 import RecordControl from "./RecordControl.vue";
 
 export default {
-  props: ["title"],
+  props: ["title", "code", "showControls"],
   components: {
     VueAceEditor,
     RecordControl,
   },
   data: () => ({
-    code: 'print("hello, world")',
     lineNumbers: true,
     dialogVisible: false,
     titleInput: null,
@@ -52,15 +51,15 @@ export default {
     codeTimeFrame: null,
     startingTime: null,
     timer: null,
+    count: 0,
   }),
   mounted() {
     this.$emit("update:code", this.code);
-    // this.titleInput = this.title;
+    this.titleInput = this.title;
   },
   methods: {
-    codeUpdated: function (code) {
-      this.code = code;
-      this.$emit("update:code", this.code);
+    codeUpdated(code) {
+      this.$emit("update:code", code);
     },
     changeTitle() {
       this.titleInput = this.title;
@@ -90,12 +89,12 @@ export default {
           .then((json) => {
             fetch("/api/video", {
               method: "POST",
-              headers: {  
+              headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 title: this.title,
-                code_json:JSON.stringify(this.codeTimeFrame),
+                code_json: JSON.stringify(this.codeTimeFrame),
                 video_id: json.id,
               }),
             });
@@ -106,15 +105,16 @@ export default {
           message: "Video saved on the server",
         });
         clearInterval(this.timer);
+        this.timer = null;
+        this.count = 0;
       } else {
         this.codeTimeFrame = [];
-        this.startingTime = new Date().getUTCSeconds();
         this.timer = setInterval(() => {
-          let diff = new Date().getUTCSeconds() - this.startingTime;
           this.codeTimeFrame.push({
-            time: diff,
+            time: this.count,
             code: this.code,
           });
+          this.count++;
         }, 1000);
       }
     },
