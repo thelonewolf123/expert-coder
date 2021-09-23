@@ -18,7 +18,7 @@
       v-on:change-content="codeUpdated"
     ></vue-ace-editor>
     <el-dialog
-      title="Tips"
+      title="Title"
       :show-close-icon="false"
       :visible.sync="dialogVisible"
       width="30%"

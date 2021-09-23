@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from dropbox.files import WriteMode
-from dropbox.exceptions import ApiError, AuthError
+from dropbox.exceptions import ApiError
 import uuid
 import dropbox
 
